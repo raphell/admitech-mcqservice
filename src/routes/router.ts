@@ -153,7 +153,7 @@ qcmRouter.post('/mcq', async (req: Request, res: Response) => {
 
   } catch (e) {
     console.log("ERROR : "+e.message);
-    res.status(500).json(e.message);
+    res.status(400).json(e.message);
   }
 });
 
