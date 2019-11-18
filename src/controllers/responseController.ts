@@ -15,7 +15,7 @@ async function createResponse(response: Response): Promise<Response> {
 
 
 function getResponseByLabel(question_id: number, label: string): Promise<Response> {
-  console.log("IN GET response BY label");
+  console.log('IN GET response BY label');
   return Response.findOne({
     where: {
       label: label,
