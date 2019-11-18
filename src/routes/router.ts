@@ -135,17 +135,17 @@ qcmRouter.post('/mcq', async (req: Request, res: Response) => {
             let createdResponse = await responseController.createResponse(newResponse);
 
             if(createdResponse==undefined){
-              res.sendStatus(400).json('Probleme, undefinded response created');
+              res.sendStatus(400).json('Probleme during response creation');
               res.end();
             }
           })
         }
         else{
-          res.sendStatus(400).json('Probleme, undefinded question created');
+          res.sendStatus(500).json('Probleme during question creation');
         }
       })
     } else {
-      res.status(400).json('Probleme, undefinded mcq created');
+      res.status(500).json('Probleme during MCQ creation');
     }
     console.log('BEFORE send status');
     res.sendStatus(201);
@@ -153,7 +153,7 @@ qcmRouter.post('/mcq', async (req: Request, res: Response) => {
 
   } catch (e) {
     console.log("ERROR : "+e.message);
-    res.status(400).json(e.message);
+    res.status(500).json(e.message);
   }
 });
 
@@ -208,7 +208,7 @@ qcmRouter.post('/responseCandidat', async (req: Request, res: Response) => {
       .send({correct: isResponseValid});
   }
   else{
-    res.sendStatus(400).json('Probleme, undefined candidateResponse created');
+    res.sendStatus(500).json('Probleme during candidateResponse creation');
     res.end();
   }
 });
