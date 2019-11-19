@@ -17,8 +17,8 @@ module.exports = {
       origin: {
         type: Sequelize.STRING
       },
-      year: {
-        type: Sequelize.INTEGER
+      favorite: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
