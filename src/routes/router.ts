@@ -13,12 +13,17 @@ import Candidate from '../models/candidate';
 import CandidateResponse from '../models/candidateresponse';
 
 const qcmRouter = Router();
-const request = require('request');
+//const request = require('request');
 
+qcmRouter.get('/', (req: Request, res: Response) => {
+  //logger.info('A request had been received on /');
+  res.send('YAY you reach the mcq service API !');
+});
 
-
+/*
 qcmRouter.get('/add/mcq', (req: Request, res: Response) => {
   console.log('BEGIN POST');
+  //request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
   request.post('http://localhost:3000/mcq', {
     json: {
       title: 'My first MCQ',
@@ -102,7 +107,7 @@ qcmRouter.get('/add/rep', (req: Request, res: Response) => {
 
   console.log('behind post request');
 });
-
+*/
 
 
 
@@ -141,11 +146,11 @@ qcmRouter.post('/mcq', async (req: Request, res: Response) => {
           });
         }
         else{
-          res.sendStatus(500).json('Probleme during question creation');
+          res.sendStatus(400).json('Probleme during question creation');
         }
       });
     } else {
-      res.status(500).json('Probleme during MCQ creation');
+      res.status(400).json('Probleme during MCQ creation');
     }
     console.log('BEFORE send status');
     res.sendStatus(201);
