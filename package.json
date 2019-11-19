@@ -5,7 +5,7 @@
   "main": "lib/app.js",
   "scripts": {
     "start": "node lib/app.js",
-    "lint": "eslint src/**/* tests/**/*",
+    "lint": "eslint src/**/*.ts tests/**/*.ts",
     "test": "jest ./tests",
     "build": "tsc"
   },

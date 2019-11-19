@@ -1,6 +1,6 @@
 import db from '../database/config/database';
 import { Model, DataTypes } from 'sequelize';
-import Question from './question';
+//import Question from './question';
 
 
 class CandidateResponse extends Model {

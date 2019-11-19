@@ -1,6 +1,6 @@
 import db from '../database/config/database';
 import { Model, DataTypes } from 'sequelize';
-import Response from './response';
+//import Response from './response';
 
 
 class Question extends Model {
