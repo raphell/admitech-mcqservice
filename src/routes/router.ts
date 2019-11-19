@@ -279,7 +279,6 @@ qcmRouter.get('/mcqs', async (req: Request, res: Response) => {
 });
 
 qcmRouter.get('/mcq/:id', async (req: Request, res: Response) => {
-  res.send('WOWOWOWOWOWWOWOWOWOWO');
   let mcq = await mcqController.getMcqById(parseInt(req.params.id));
   if(mcq!=null){
     let result = {
