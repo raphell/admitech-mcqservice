@@ -7,14 +7,16 @@ async function createNewMcq(mcq: Mcq): Promise<Mcq> {
     title: mcq.title,
     formation: mcq.formation,
     origin: mcq.origin,
-    year: mcq.year
+    favorite: false
   };
   console.log('newmcq initialised');
   console.log(newMcq);
   return Mcq.create(newMcq);
 }
 
-
+function getAllMcqs(): Promise<Mcq[]> {
+  return Mcq.findAll();
+}
 
 function getMcqByTitle(mcqTitle: string): Promise<Mcq> {
   return Mcq.findOne({
@@ -32,4 +34,28 @@ function getMcqById(id: number): Promise<Mcq> {
   });
 }
 
-export = { getMcqByTitle, createNewMcq, getMcqById };
+
+/*
+function getMcqByFormationAndOrigin(formation: string, origin: string): Promise<Mcq> {
+  return Mcq.findAll({
+    where: {
+      formation: formation,
+      origin: origin
+    }
+  });
+}
+*/
+
+
+function getFavoriteMcqByFormationAndOrigin(formation: string, origin: string): Promise<Mcq> {
+  return Mcq.findOne({
+    where: {
+      formation: formation,
+      origin: origin,
+      favorite: true,
+    }
+  });
+}
+
+
+export = { getMcqByTitle, createNewMcq, getMcqById, getAllMcqs, getFavoriteMcqByFormationAndOrigin };
