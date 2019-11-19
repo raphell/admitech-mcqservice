@@ -7,7 +7,7 @@ class Mcq extends Model {
   public title!: string;
   public formation!: string;
   public origin!: string;
-  public year!: number;
+  public favorite!: boolean;
 }
 
 Mcq.init({
@@ -19,7 +19,7 @@ Mcq.init({
   title: DataTypes.STRING,
   formation: DataTypes.STRING,
   origin: DataTypes.STRING,
-  year: DataTypes.INTEGER,
+  favorite: DataTypes.BOOLEAN,
 }, {
   tableName: 'Mcqs',
   timestamps: false,
