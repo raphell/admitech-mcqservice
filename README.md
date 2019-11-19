@@ -4,8 +4,6 @@ Team : Lucas Gonçalves, Inès Missoum, Fatima Machhouri, Thomas Falcone, Raphae
 
 ## Routes
 
-
-
 ### Accueil
 
 ![#1c7cf0 ](https://placehold.it/15/1c7cf0/000000?text=+) **GET** - ``/mcq/:id`` -  Renvoie l'ensemble des informations d'un QCM.
