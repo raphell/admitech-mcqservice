@@ -18,7 +18,6 @@ COPY . .
 
 RUN npm install
 RUN npm run build
-RUN npx sequelize-cli db:migrate
 
 EXPOSE 3000
 
