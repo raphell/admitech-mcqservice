@@ -411,6 +411,53 @@ qcmRouter.get('/mcq/:id', async (req: Request, res: Response) => {
 
 
 
+qcmRouter.get('/mcqAdmin/:id', async (req: Request, res: Response) => {
+  let mcq = await mcqController.getMcqById(parseInt(req.params.id));
+  if(mcq!=null){
+    let result = {
+      id: mcq.id,
+      title: mcq.title,
+      formation: mcq.formation,
+      origin: mcq.origin,
+      favorite: mcq.favorite,
+      questions:[] as any
+    };
+    let mcqquestions = await questionController.getQuestionByMcqId(mcq.id);
+    for (const question of mcqquestions){
+      console.log('each QUESTION : '+question);
+      let qRes = {
+        id: question.id,
+        title: question.title,
+        responses: [] as any
+      };
+      console.log(qRes);
+      let questionresponses = await responseController.getResponseByQuestion(question.id);
+      for (const response of questionresponses){
+        console.log('each RESPONSE : '+response);
+        let rRes = {
+          id: response.id,
+          label: response.label,
+          correct: response.correct
+        };
+        console.log(rRes);
+        console.log();
+        qRes.responses.push(rRes);
+      }
+      result.questions.push(qRes);
+    }
+    res.type('application/json')
+      .status(200)
+      .send(result);
+  }
+  else{
+    res.status(404)
+      .send('Probleme, Mcq not found');
+    res.send('NUUUUUUUUUUUUUUUUUUUUULLL');
+  }
+});
+
+
+
 
 
 qcmRouter.get('/candidate/:id/results', async (req: Request, res: Response) => {
