@@ -4,8 +4,8 @@ import { Model, DataTypes } from 'sequelize';
 
 
 class CandidateResponse extends Model {
-  private id!: number;
-  public label!: string;
+  public id!: number;
+  public responses!: string;
   public candidate_id!: number;
   public question_id!: number;
 }
@@ -16,7 +16,7 @@ CandidateResponse.init({
     primaryKey: true,
     autoIncrement: true
   },
-  label: DataTypes.STRING,
+  responses: DataTypes.STRING,
   candidate_id: DataTypes.INTEGER,
   question_id: DataTypes.INTEGER,
 }, {

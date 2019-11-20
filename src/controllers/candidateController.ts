@@ -22,4 +22,15 @@ function getCandidateByCandidatureId(candidateId: number): Promise<Candidate> {
   });
 }
 
-export = { createCandidate, getCandidateByCandidatureId };
+
+function setCandidateMark(candidateId: number, mark: number): Promise<[number, Candidate[]]> {
+  return Candidate.update(
+    { mark: mark},
+    { returning: true,
+      where: {
+        id: candidateId
+      }
+    });
+}
+
+export = { createCandidate, getCandidateByCandidatureId, setCandidateMark };
