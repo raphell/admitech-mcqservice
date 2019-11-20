@@ -8,8 +8,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      label: {
-        type: Sequelize.STRING
+      responses: {
+        type:Sequelize.STRING,
       },
       candidate_id: {
         type: Sequelize.INTEGER,
