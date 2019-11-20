@@ -9,8 +9,8 @@ import candidateResponseController from '../controllers/candidateResponseControl
 import Mcq from '../models/mcq';
 import Question from '../models/question';
 import ResponseM from '../models/response';
-import Candidate from '../models/candidate';
-import CandidateResponse from '../models/candidateresponse';
+//import Candidate from '../models/candidate';
+//import CandidateResponse from '../models/candidateresponse';
 
 const qcmRouter = Router();
 //const request = require('request');
@@ -26,7 +26,7 @@ qcmRouter.get('/add/mcq', (req: Request, res: Response) => {
   //request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
   request.post('http://localhost:3000/mcq', {
     json: {
-      title: 'My first MCQ',
+      title: 'My second MCQ',
       formation: 'IG',
       origin: 'IUT',
       questions:[
@@ -106,6 +106,37 @@ qcmRouter.get('/add/rep', (req: Request, res: Response) => {
 
   console.log('behind post request');
 });
+
+
+qcmRouter.get('/add/fav', (req: Request, res: Response) => {
+  console.log('BEGIN add fav');
+  request({url: 'http://localhost:3000/mcq/1', method: 'DELETE', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+    console.log('IN CALLBACK');
+    if (error) {
+      console.log('IN ERROR');
+      console.error(error);
+      return;
+    }
+    console.log(`statusCode: ${res.statusCode}`);
+    console.log('RESULATS DE LA REQUETE POST : '+body);
+    if(res.statusCode==201){
+      /*if(body.correct){
+        console.log('GOOD ANSWER');
+        return;
+      }
+      else{
+        console.log('BAAAAD ANSWER');
+        return;
+      }
+    }
+    else{
+      console.log('FAILED');
+      return;
+    }
+  });
+
+  console.log('behind post request');
+});
 */
 
 
@@ -166,15 +197,34 @@ qcmRouter.post('/mcq', async (req: Request, res: Response) => {
 
 
 qcmRouter.put('/mcq/:id/favorite', async (req: Request, res: Response) => {
-  let newFavoriteMcq = await mcqController.getMcqById(parseInt(req.params.id));
+  let mcq = await mcqController.getMcqById(parseInt(req.params.id));
+
+  await mcqController.unsetFavorite(mcq.formation, mcq.origin);
+
+  let newFavorite = await mcqController.setFavorite(parseInt(req.params.id));
+
+  console.log('AFTER SET : '+newFavorite[0]);
+  console.log('AFTER SET : '+newFavorite[1][0].origin);
+
+  res.status(201)
+    .end();
+  /*let newFavoriteMcq = await mcqController.getMcqById(parseInt(req.params.id));
+  console.log("THE NEW FAV : "+newFavoriteMcq.title);
+  console.log('BEFORE : '+newFavoriteMcq.favorite);
   if(newFavoriteMcq!=null){
     let oldFavoriteMcq = await mcqController.getFavoriteMcqByFormationAndOrigin(newFavoriteMcq.formation, newFavoriteMcq.origin);
 
-    oldFavoriteMcq.favorite = false;
-    oldFavoriteMcq.save();
+    if(oldFavoriteMcq!=null){
+      oldFavoriteMcq.favorite = false;
+      oldFavoriteMcq.save();
+    }
 
     newFavoriteMcq.favorite = true;
     newFavoriteMcq.save();
+    console.log('AFTER : '+newFavoriteMcq.favorite);
+    let test = await mcqController.getMcqById(parseInt(req.params.id));
+    console.log('TEEEEEEEEEEEEST : '+test.favorite);
+
 
     res.status(201)
       .end();
@@ -183,16 +233,26 @@ qcmRouter.put('/mcq/:id/favorite', async (req: Request, res: Response) => {
     console.log('IN ERROR');
     res.sendStatus(404).json('Probleme, Mcq not found');
     res.end();
-  }
+  }*/
 });
 
 
 
 qcmRouter.delete('/mcq/:id', async (req: Request, res: Response) => {
+  console.log('IN DELEEEEEEETE');
   let mcqToDelete = await mcqController.getMcqById(parseInt(req.params.id));
 
   if (mcqToDelete!=null){
-    mcqToDelete.destroy();
+
+    let questions = await questionController.getQuestionByMcqId(mcqToDelete.id);
+    for (const question of questions){
+      let responses = await responseController.getResponseByQuestion(question.id);
+      for (const response of responses){
+        responseController.deleteResponse(response.id);
+      }
+      questionController.deleteQuestion(question.id);
+    }
+    mcqController.deleteMcq(mcqToDelete.id);
     res.status(201)
       .end();
   }
@@ -205,24 +265,34 @@ qcmRouter.delete('/mcq/:id', async (req: Request, res: Response) => {
 
 
 
-
+/*
 qcmRouter.post('/responseCandidat', async (req: Request, res: Response) => {
-  let candidateResponse = req.body;
+  let candidateResponses = req.body;
   console.log('IN RESPONSE CANDIDAT');
   console.log(req.body);
-  let candidate = await candidateController.getCandidateByCandidatureId(candidateResponse.idCandidature);
+  let candidate = await candidateController.getCandidateByCandidatureId(candidateResponses.idCandidature);
   console.log('candidate : '+candidate);
   //console.log("ITS ID : "+candidate.id);
   if(candidate==null){
     let newCandidate = new Candidate();
     newCandidate.mark = -1;
-    newCandidate.idCandidature = candidateResponse.idCandidature;
+    newCandidate.idCandidature = candidateResponses.idCandidature;
     candidate = await candidateController.createCandidate(newCandidate);
     console.log('AFTER CREATING NEW CANDIDATE');
   }
 
+  let note = 0;
+  candidateResponses.questions.forEach(candidateResponse => {
+
+  });
+
+  candidate.mark = note;
+
+
+
   let newCandidateResponse = new CandidateResponse();
-  newCandidateResponse.label = candidateResponse.response;
+  //let response = await responseController.getResponseById(candidateResponse.r)
+  newCandidateResponse.label = candidateResponse.response; //response is a table of id
   newCandidateResponse.candidate_id = candidate.id;
   newCandidateResponse.question_id = candidateResponse.idQuestion;
   let createdCandidateResponse = await candidateResponseController.createCandidateResponse(newCandidateResponse);
@@ -233,8 +303,8 @@ qcmRouter.post('/responseCandidat', async (req: Request, res: Response) => {
     let candidateResponses = createdCandidateResponse.label.split('//');
 
     let isResponseValid = true;
-    candidateResponses.forEach( async(candRes: string) => {   //for each response of the candidate, verify if the response if correct
-      let verif = await responseController.getResponseByLabel(createdCandidateResponse.question_id, candRes);
+    candidateResponses.forEach( async(candRes: int) => {   //for each response of the candidate, verify if the response if correct
+      let verif = await responseController.getResponseById(createdCandidateResponse.question_id, candRes);
       if (verif==null){
         isResponseValid = false;
       }
@@ -247,16 +317,21 @@ qcmRouter.post('/responseCandidat', async (req: Request, res: Response) => {
       isResponseValid = candidateResponses.includes(goodResp.label);
     });
 
-    res.type('application/json')
-      .status(201)
-      .send({correct: isResponseValid});
+    if(isResponseValid){
+      note = note + 1;
+    }
+
   }
   else{
     res.sendStatus(500).json('Probleme during candidateResponse creation');
     res.end();
   }
-});
 
+  res.type('application/json')
+    .status(201)
+    .send({correct: isResponseValid});
+});
+*/
 
 qcmRouter.get('/mcqs', async (req: Request, res: Response) => {
   let mcqs: Mcq[] = await mcqController.getAllMcqs();
@@ -407,7 +482,7 @@ qcmRouter.get('/:formation/:origin/mcq', async (req: Request, res: Response) => 
       .send(result);
   }
   else{
-    res.sendStatus(404).json('Probleme, Mcq not found');
+    res.sendStatus(404).json('Probleme, no mcq is favorite for these specific formation and origin');
     res.end();
   }
 });

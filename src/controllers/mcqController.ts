@@ -35,6 +35,30 @@ function getMcqById(id: number): Promise<Mcq> {
 }
 
 
+function setFavorite(id: number): Promise<[number, Mcq[]]> {
+  return Mcq.update(
+    { favorite: true},
+    { returning: true,
+      where: {
+        id: id
+      }
+    });
+}
+
+function unsetFavorite(formation: string, origin: string): Promise<[number, Mcq[]]> {
+  return Mcq.update(
+    { favorite: false},
+    { returning: true,
+      where: {
+        favorite: true,
+        origin: origin,
+        formation: formation
+      }
+    }
+  );
+}
+
+
 /*
 function getMcqByFormationAndOrigin(formation: string, origin: string): Promise<Mcq> {
   return Mcq.findAll({
@@ -57,5 +81,13 @@ function getFavoriteMcqByFormationAndOrigin(formation: string, origin: string): 
   });
 }
 
+function deleteMcq(id: number): Promise<number> {
+  return Mcq.destroy({
+    where: {
+      id: id
+    }
+  });
+}
 
-export = { getMcqByTitle, createNewMcq, getMcqById, getAllMcqs, getFavoriteMcqByFormationAndOrigin };
+
+export = { getMcqByTitle, deleteMcq, setFavorite, unsetFavorite, createNewMcq, getMcqById, getAllMcqs, getFavoriteMcqByFormationAndOrigin };
