@@ -57,13 +57,15 @@ qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
     console.log('IN CALLBACK');
     if (error) {
       console.log('IN ERROR');
+
+
       console.error(error);
       return;
     }
     console.log(`statusCode: ${res.statusCode}`);
     if(res.statusCode==201){
-      console.log("winwinwinwin");
-      return("SUCCESS");
+      console.log('winwinwinwin');
+      return('SUCCESS');
     }
     else{
       //res.send("FAILED");
@@ -73,7 +75,7 @@ qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
 
   console.log('RETURN MESSAGE POST = '+tryRes.statusText);
   res.status(201)
-    .send("ITS A WIN");
+    .send('ITS A WIN');
   console.log('behind post request');
 });
 
@@ -126,10 +128,10 @@ qcmRouter.get('/add/rep', (req: Request, res: Response) => {
 //----------------------------------------------------------------------------------------------------
 
 
-qcmRouter.get('/add/fav', (req: Request, res: Response) => {
+qcmRouter.get('/add/fav', async (req: Request, res: Response) => {
   console.log('BEGIN add fav');
-  request({url: 'http://test-admitech-mcq-service:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
-  //request({url: 'http://localhost:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+  let truc = await request({url: 'http://test-admitech-mcq-service.igpolytech.fr/attribute/2/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+  //let truc = await request({url: 'http://localhost:3000/attribute/2/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
     console.log('IN CALLBACK');
     if (error) {
       console.log('IN ERROR');
@@ -139,6 +141,7 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
     console.log(`statusCode: ${res.statusCode}`);
     console.log('RESULATS DE LA REQUETE POST : '+body);
     if(res.statusCode==201){
+      return('SUCCESS');
       /*if(body.correct){
         console.log('GOOD ANSWER');
         return;
@@ -150,14 +153,14 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
     }
     else{
       console.log('FAILED');
-      return;
+      return ('FAILED');
     }
   });
-
+  res.send(truc);
   console.log('behind post request');
 });
-
 */
+
 //----------------------------------------------------------------------------------------------------
 
 
@@ -244,6 +247,7 @@ qcmRouter.put('/attribute/:idMcq/:idCandidature', async (req: Request, res: Resp
   if(candidate==null){
     let newCandidate = new Candidate();
     newCandidate.mark = -1;
+    newCandidate.mcq = 0;
     newCandidate.idCandidature = parseInt(req.params.idCandidature);
     candidate = await candidateController.createCandidate(newCandidate);
     console.log('AFTER CREATING NEW CANDIDATE');
@@ -551,7 +555,13 @@ qcmRouter.get('/candidate/:id/results', async (req: Request, res: Response) => {
 });
 
 
-
+qcmRouter.get('/candidate/idCandidate/note', async (req: Request, res: Response) => {
+  let candidate = await candidateController.getCandidateByCandidatureId(parseInt(req.params.idCandidate));
+  let note = candidate.mark;
+  res.type('application/json')
+    .status(200)
+    .send({mark: note});
+});
 
 
 
