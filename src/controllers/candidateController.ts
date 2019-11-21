@@ -27,7 +27,6 @@ function getCandidates(): Promise<Candidate[]> {
   return Candidate.findAll();
 }
 
-
 function setCandidateMark(candidateId: number, mark: number): Promise<[number, Candidate[]]> {
   return Candidate.update(
     { mark: mark},
