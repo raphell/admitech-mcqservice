@@ -13,7 +13,7 @@ import Candidate from '../models/candidate';
 import CandidateResponse from '../models/candidateresponse';
 
 const qcmRouter = Router();
-const request = require('request');
+//const request = require('request');
 
 qcmRouter.get('/', (req: Request, res: Response) => {
   //logger.info('A request had been received on /');
@@ -23,7 +23,7 @@ qcmRouter.get('/', (req: Request, res: Response) => {
 
 //----------------------------------------------------------------------------------------------------
 
-
+/*
 qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
   console.log('BEGIN POST');
   //let tryRes = await request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
@@ -146,7 +146,7 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
       else{
         console.log('BAAAAD ANSWER');
         return;
-      }*/
+      }
     }
     else{
       console.log('FAILED');
@@ -156,7 +156,7 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
 
   console.log('behind post request');
 });
-
+*/
 
 //----------------------------------------------------------------------------------------------------
 
@@ -573,7 +573,7 @@ qcmRouter.get('/candidate/:idCandidate/mcq', async (req: Request, res: Response)
   }
   else{
     res.status(404)
-    .send('Probleme, no mcq is favorite for these specific formation and origin');
+      .send('Probleme, no mcq is favorite for these specific formation and origin');
   }
 });
 
