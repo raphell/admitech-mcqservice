@@ -23,6 +23,11 @@ function getCandidateByCandidatureId(candidateId: number): Promise<Candidate> {
 }
 
 
+function getCandidates(): Promise<Candidate[]> {
+  return Candidate.findAll();
+}
+
+
 function setCandidateMark(candidateId: number, mark: number): Promise<[number, Candidate[]]> {
   return Candidate.update(
     { mark: mark},
@@ -43,4 +48,4 @@ function setCandidateMcq(candidateId: number, mcq: number): Promise<[number, Can
     });
 }
 
-export = { createCandidate, getCandidateByCandidatureId, setCandidateMark, setCandidateMcq };
+export = { createCandidate, getCandidateByCandidatureId, setCandidateMark, setCandidateMcq, getCandidates };

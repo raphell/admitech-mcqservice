@@ -26,8 +26,8 @@ qcmRouter.get('/', (req: Request, res: Response) => {
 /*
 qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
   console.log('BEGIN POST');
-  //let tryRes = await request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
-  let tryRes = await request.post('http://localhost:3000/mcq', {
+  let tryRes = await request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
+  //let tryRes = await request.post('http://localhost:3000/mcq', {
     json: {
       title: 'My h fhvgbhgbvkbv MCQ',
       formation: 'IG',
@@ -128,8 +128,8 @@ qcmRouter.get('/add/rep', (req: Request, res: Response) => {
 
 qcmRouter.get('/add/fav', (req: Request, res: Response) => {
   console.log('BEGIN add fav');
-  //request({url: 'http://test-admitech-mcq-service:3000/mcq/7/favorite', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
-  request({url: 'http://localhost:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+  request({url: 'http://test-admitech-mcq-service:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+  //request({url: 'http://localhost:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
     console.log('IN CALLBACK');
     if (error) {
       console.log('IN ERROR');
@@ -156,8 +156,8 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
 
   console.log('behind post request');
 });
-*/
 
+*/
 //----------------------------------------------------------------------------------------------------
 
 
@@ -362,8 +362,6 @@ qcmRouter.post('/responseCandidat', async (req: Request, res: Response) => {
 
 //----------------------------------------------------------------------------------------------------
 
-
-
 qcmRouter.get('/mcqs', async (req: Request, res: Response) => {
   let mcqs: Mcq[] = await mcqController.getAllMcqs();
   let result = {
@@ -379,6 +377,27 @@ qcmRouter.get('/mcqs', async (req: Request, res: Response) => {
       favorite: mcq.favorite
     };
     result.mcqs.push(mRes);
+  });
+  res.type('application/json')
+    .status(200)
+    .send(result);
+});
+
+
+
+qcmRouter.get('/candidates', async (req: Request, res: Response) => {
+  let candidates: Candidate[] = await candidateController.getCandidates();
+  let result = {
+    candidates: [] as any
+  };
+
+  candidates.forEach((candidate: Candidate) => {
+    let mRes = {
+      id: candidate.id,
+      title: candidate.mark,
+      mcq: candidate.mcq,
+    };
+    result.candidates.push(mRes);
   });
   res.type('application/json')
     .status(200)
