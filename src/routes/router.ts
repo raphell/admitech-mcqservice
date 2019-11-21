@@ -13,7 +13,7 @@ import Candidate from '../models/candidate';
 import CandidateResponse from '../models/candidateresponse';
 
 const qcmRouter = Router();
-//const request = require('request');
+const request = require('request');
 
 qcmRouter.get('/', (req: Request, res: Response) => {
   //logger.info('A request had been received on /');
@@ -23,11 +23,11 @@ qcmRouter.get('/', (req: Request, res: Response) => {
 
 //----------------------------------------------------------------------------------------------------
 
-/*
+
 qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
   console.log('BEGIN POST');
-  //let tryRes = await request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
-  let tryRes = await request.post('http://localhost:3000/mcq', {
+  let tryRes = await request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
+  //let tryRes = await request.post('http://localhost:3000/mcq', {
     json: {
       title: 'My h fhvgbhgbvkbv MCQ',
       formation: 'IG',
@@ -128,8 +128,8 @@ qcmRouter.get('/add/rep', (req: Request, res: Response) => {
 
 qcmRouter.get('/add/fav', (req: Request, res: Response) => {
   console.log('BEGIN add fav');
-  //request({url: 'http://test-admitech-mcq-service:3000/mcq/7/favorite', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
-  request({url: 'http://localhost:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+  request({url: 'http://test-admitech-mcq-service:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+  //request({url: 'http://localhost:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
     console.log('IN CALLBACK');
     if (error) {
       console.log('IN ERROR');
@@ -146,7 +146,7 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
       else{
         console.log('BAAAAD ANSWER');
         return;
-      }
+      }*/
     }
     else{
       console.log('FAILED');
@@ -156,7 +156,7 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
 
   console.log('behind post request');
 });
-*/
+
 
 //----------------------------------------------------------------------------------------------------
 
@@ -379,6 +379,27 @@ qcmRouter.get('/mcqs', async (req: Request, res: Response) => {
       favorite: mcq.favorite
     };
     result.mcqs.push(mRes);
+  });
+  res.type('application/json')
+    .status(200)
+    .send(result);
+});
+
+
+
+qcmRouter.get('/candidates', async (req: Request, res: Response) => {
+  let candidates: Candidate[] = await candidateController.getCandidates();
+  let result = {
+    candidates: [] as any
+  };
+
+  candidates.forEach((candidate: Candidate) => {
+    let mRes = {
+      id: candidate.id,
+      title: candidate.mark,
+      mcq: candidate.mcq,
+    };
+    result.candidates.push(mRes);
   });
   res.type('application/json')
     .status(200)
