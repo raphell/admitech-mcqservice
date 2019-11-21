@@ -13,7 +13,7 @@ import Candidate from '../models/candidate';
 import CandidateResponse from '../models/candidateresponse';
 
 const qcmRouter = Router();
-//const request = require('request');
+const request = require('request');
 
 qcmRouter.get('/', (req: Request, res: Response) => {
   //logger.info('A request had been received on /');
@@ -23,15 +23,15 @@ qcmRouter.get('/', (req: Request, res: Response) => {
 
 //----------------------------------------------------------------------------------------------------
 
-/*
-qcmRouter.get('/add/mcq', (req: Request, res: Response) => {
+
+qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
   console.log('BEGIN POST');
-  //request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
-  request.post('http://localhost:3000/mcq', {
+  //let tryRes = await request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
+  let tryRes = await request.post('http://localhost:3000/mcq', {
     json: {
-      title: 'My third MCQ',
-      formation: 'DO',
-      origin: 'IUT',
+      title: 'My h fhvgbhgbvkbv MCQ',
+      formation: 'IG',
+      origin: 'Peip',
       questions:[
         { title:'question 1',
           responses: [
@@ -61,15 +61,19 @@ qcmRouter.get('/add/mcq', (req: Request, res: Response) => {
       return;
     }
     console.log(`statusCode: ${res.statusCode}`);
-    /*if(res.statusCode==201){
-      res.status(201)
-        .send("SUCCESS");
+    if(res.statusCode==201){
+      console.log("winwinwinwin");
+      return("SUCCESS");
     }
     else{
       //res.send("FAILED");
     }
     console.log(body);
   });
+
+  console.log('RETURN MESSAGE POST = '+tryRes.statusText);
+  res.status(201)
+    .send("ITS A WIN");
   console.log('behind post request');
 });
 
@@ -124,7 +128,8 @@ qcmRouter.get('/add/rep', (req: Request, res: Response) => {
 
 qcmRouter.get('/add/fav', (req: Request, res: Response) => {
   console.log('BEGIN add fav');
-  request({url: 'http://localhost:3000/mcq/1', method: 'DELETE', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+  //request({url: 'http://test-admitech-mcq-service:3000/mcq/7/favorite', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
+  request({url: 'http://localhost:3000/attribute/1/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
     console.log('IN CALLBACK');
     if (error) {
       console.log('IN ERROR');
@@ -141,7 +146,7 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
       else{
         console.log('BAAAAD ANSWER');
         return;
-      }
+      }*/
     }
     else{
       console.log('FAILED');
@@ -152,7 +157,7 @@ qcmRouter.get('/add/fav', (req: Request, res: Response) => {
   console.log('behind post request');
 });
 
-*/
+
 //----------------------------------------------------------------------------------------------------
 
 
@@ -199,7 +204,7 @@ qcmRouter.post('/mcq', async (req: Request, res: Response) => {
     }
     console.log('BEFORE send status');
     res.status(201)
-      .send('the mcq creation succed');
+      .send({final:'the mcq creation succed'});
     console.log('AFTER send status');
 
   } catch (e) {
@@ -229,6 +234,28 @@ qcmRouter.put('/mcq/:id/favorite', async (req: Request, res: Response) => {
 });
 
 
+
+
+qcmRouter.put('/attribute/:idMcq/:idCandidature', async (req: Request, res: Response) => {
+
+  let candidate = await candidateController.getCandidateByCandidatureId(parseInt(req.params.idCandidature));
+  console.log('candidate : '+candidate);
+  //console.log("ITS ID : "+candidate.id);
+  if(candidate==null){
+    let newCandidate = new Candidate();
+    newCandidate.mark = -1;
+    newCandidate.idCandidature = parseInt(req.params.idCandidature);
+    candidate = await candidateController.createCandidate(newCandidate);
+    console.log('AFTER CREATING NEW CANDIDATE');
+  }
+
+  await candidateController.setCandidateMcq(candidate.id, parseInt(req.params.idMcq));
+
+  res.status(201)
+    .end();
+});
+
+
 //----------------------------------------------------------------------------------------------------
 
 
@@ -252,8 +279,8 @@ qcmRouter.delete('/mcq/:id', async (req: Request, res: Response) => {
   }
   else{
     console.log('IN ERROR');
-    res.sendStatus(404).json('Probleme, Mcq not found');
-    res.end();
+    res.status(404)
+      .send('Probleme, Mcq not found');
   }
 });
 
@@ -404,7 +431,6 @@ qcmRouter.get('/mcq/:id', async (req: Request, res: Response) => {
   else{
     res.status(404)
       .send('Probleme, Mcq not found');
-    res.send('NUUUUUUUUUUUUUUUUUUUUULLL');
   }
 });
 
@@ -500,8 +526,8 @@ qcmRouter.get('/candidate/:id/results', async (req: Request, res: Response) => {
   }
   else{
     console.log('IN ERROR');
-    res.sendStatus(404).json('Probleme, Candidate not found');
-    res.end();
+    res.status(404)
+      .send('Probleme, Candidate not found');
   }
 });
 
@@ -510,8 +536,9 @@ qcmRouter.get('/candidate/:id/results', async (req: Request, res: Response) => {
 
 
 
-qcmRouter.get('/:formation/:origin/mcq', async (req: Request, res: Response) => {
-  let mcq = await mcqController.getFavoriteMcqByFormationAndOrigin(req.params.formation, req.params.origin);
+qcmRouter.get('/candidate/:idCandidate/mcq', async (req: Request, res: Response) => {
+  let candidate = await candidateController.getCandidateByCandidatureId(parseInt(req.params.idCandidate));
+  let mcq = await mcqController.getMcqById(candidate.mcq);
   if(mcq!=null){
     let result = {
       id: mcq.id,
@@ -545,8 +572,8 @@ qcmRouter.get('/:formation/:origin/mcq', async (req: Request, res: Response) => 
       .send(result);
   }
   else{
-    res.sendStatus(404).json('Probleme, no mcq is favorite for these specific formation and origin');
-    res.end();
+    res.status(404)
+    .send('Probleme, no mcq is favorite for these specific formation and origin');
   }
 });
 
