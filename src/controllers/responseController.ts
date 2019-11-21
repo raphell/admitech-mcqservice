@@ -13,7 +13,6 @@ async function createResponse(response: Response): Promise<Response> {
   return Response.create(newResponse);
 }
 
-
 function getResponseByLabel(question_id: number, label: string): Promise<Response> {
   console.log('IN GET response BY label');
   return Response.findOne({
@@ -24,11 +23,18 @@ function getResponseByLabel(question_id: number, label: string): Promise<Respons
   });
 }
 
-
 function getResponseByQuestion(id: number): Promise<Response[]> {
   return Response.findAll({
     where: {
       question_id: id
+    }
+  });
+}
+
+function getResponseById(id: number): Promise<Response> {
+  return Response.findOne({
+    where: {
+      id: id
     }
   });
 }
@@ -42,5 +48,14 @@ function getCorrectResponseByQuestion(id: number): Promise<Response[]> {
   });
 }
 
+function deleteResponse(id: number): Promise<number> {
+  console.log('DEL RESP : '+id);
+  return Response.destroy({
+    where: {
+      id: id,
+    }
+  });
+}
 
-export = { createResponse, getResponseByLabel, getResponseByQuestion, getCorrectResponseByQuestion };
+
+export = { createResponse, deleteResponse, getResponseById, getResponseByLabel, getResponseByQuestion, getCorrectResponseByQuestion };

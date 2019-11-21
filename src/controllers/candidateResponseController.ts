@@ -3,14 +3,14 @@ import CandidateResponse from '../models/candidateresponse';
 
 async function createCandidateResponse(candidateResp: CandidateResponse): Promise<CandidateResponse> {
   console.log('BEGIN create new candidate response');
-  console.log(candidateResp);
+  console.log('CANDIDATE'+candidateResp);
+
   const newCandidateResponse = {
-    label: candidateResp.label,
     candidate_id: candidateResp.candidate_id,
-    question_id: candidateResp.question_id
+    question_id: candidateResp.question_id,
+    responses: candidateResp.responses,
   };
-  console.log('newCandidateResponse initialized');
-  console.log(newCandidateResponse);
+
   return CandidateResponse.create(newCandidateResponse);
 }
 

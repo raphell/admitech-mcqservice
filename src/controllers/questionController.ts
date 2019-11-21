@@ -29,4 +29,12 @@ function getQuestionById(id: number): Promise<Question> {
   });
 }
 
-export = { createQuestion, getQuestionByMcqId, getQuestionById };
+function deleteQuestion(id: number): Promise<number> {
+  return Question.destroy({
+    where: {
+      id: id
+    }
+  });
+}
+
+export = { createQuestion, getQuestionByMcqId, getQuestionById, deleteQuestion };
