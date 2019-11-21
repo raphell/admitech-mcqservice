@@ -8,6 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      mcq: {
+        type: Sequelize.INTEGER
+      },
       idCandidature: {
         type: Sequelize.INTEGER
       },

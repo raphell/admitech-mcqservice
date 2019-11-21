@@ -6,6 +6,7 @@ class Candidate extends Model {
   public id!: number;
   public idCandidature!: number;
   public mark!: number;
+  public mcq!: number;
 }
 
 Candidate.init({
@@ -14,6 +15,7 @@ Candidate.init({
     primaryKey: true,
     autoIncrement: true
   },
+  mcq: DataTypes.INTEGER,
   idCandidature: DataTypes.INTEGER,
   mark: DataTypes.INTEGER,
 }, {
