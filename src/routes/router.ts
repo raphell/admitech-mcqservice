@@ -13,7 +13,7 @@ import Candidate from '../models/candidate';
 import CandidateResponse from '../models/candidateresponse';
 
 const qcmRouter = Router();
-const request = require('request');
+//const request = require('request');
 
 qcmRouter.get('/', (req: Request, res: Response) => {
   //logger.info('A request had been received on /');
@@ -23,7 +23,7 @@ qcmRouter.get('/', (req: Request, res: Response) => {
 
 //----------------------------------------------------------------------------------------------------
 
-
+/*
 qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
   console.log('BEGIN POST');
   let tryRes = await request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
@@ -64,8 +64,8 @@ qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
     }
     console.log(`statusCode: ${res.statusCode}`);
     if(res.statusCode==201){
-      console.log("winwinwinwin");
-      return("SUCCESS");
+      console.log('winwinwinwin');
+      return('SUCCESS');
     }
     else{
       //res.send("FAILED");
@@ -75,7 +75,7 @@ qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
 
   console.log('RETURN MESSAGE POST = '+tryRes.statusText);
   res.status(201)
-    .send("ITS A WIN");
+    .send('ITS A WIN');
   console.log('behind post request');
 });
 
@@ -149,7 +149,7 @@ qcmRouter.get('/add/fav', async (req: Request, res: Response) => {
       else{
         console.log('BAAAAD ANSWER');
         return;
-      }*/
+      }
     }
     else{
       console.log('FAILED');
@@ -159,7 +159,7 @@ qcmRouter.get('/add/fav', async (req: Request, res: Response) => {
   res.send(truc);
   console.log('behind post request');
 });
-
+*/
 
 //----------------------------------------------------------------------------------------------------
 
