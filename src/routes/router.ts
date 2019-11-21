@@ -555,7 +555,7 @@ qcmRouter.get('/candidate/:id/results', async (req: Request, res: Response) => {
 });
 
 
-qcmRouter.get('/candidate/idCandidate/note', async (req: Request, res: Response) => {
+qcmRouter.get('/candidate/:idCandidate/note', async (req: Request, res: Response) => {
   let candidate = await candidateController.getCandidateByCandidatureId(parseInt(req.params.idCandidate));
   let note = candidate.mark;
   res.type('application/json')
