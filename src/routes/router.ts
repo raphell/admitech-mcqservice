@@ -13,156 +13,15 @@ import Candidate from '../models/candidate';
 import CandidateResponse from '../models/candidateresponse';
 
 const qcmRouter = Router();
-//const request = require('request');
 
 qcmRouter.get('/', (req: Request, res: Response) => {
   res.send('YAY you reach the mcq service API !');
 });
 
 
-//----------------------------------------------------------------------------------------------------
-
-/*
-qcmRouter.get('/add/mcq', async (req: Request, res: Response) => {
-  console.log('BEGIN POST');
-  let tryRes = await request.post('http://test-admitech-mcq-service.igpolytech.fr/mcq', {
-  //let tryRes = await request.post('http://localhost:3000/mcq', {
-    json: {
-      title: 'My h fhvgbhgbvkbv MCQ',
-      formation: 'IG',
-      origin: 'Peip',
-      questions:[
-        { title:'question 1',
-          responses: [
-            { label:'first response',
-              correct: true },
-            { label:'second response',
-              correct: false },
-            { label:'thrid response',
-              correct: false },
-          ]},
-        { title:'question 2',
-          responses: [
-            { label:'2 first response',
-              correct: true },
-            { label:'2 second response',
-              correct: true },
-            { label:'2 thrid response',
-              correct: false },
-          ]}
-      ]
-    }
-  }, (error: any, res: Response, body: any) => {
-    console.log('IN CALLBACK');
-    if (error) {
-      console.log('IN ERROR');
-
-
-      console.error(error);
-      return;
-    }
-    console.log(`statusCode: ${res.statusCode}`);
-    if(res.statusCode==201){
-      console.log('winwinwinwin');
-      return('SUCCESS');
-    }
-    else{
-      //res.send("FAILED");
-    }
-    console.log(body);
-  });
-
-  console.log('RETURN MESSAGE POST = '+tryRes.statusText);
-  res.status(201)
-    .send('ITS A WIN');
-  console.log('behind post request');
-});
 
 
 //----------------------------------------------------------------------------------------------------
-
-
-qcmRouter.get('/add/rep', (req: Request, res: Response) => {
-  console.log('BEGIN add responseCandidat');
-  request.post('http://localhost:3000/responseCandidat', {
-    json: {
-      idCandidature: 42,
-      questions: [
-        { idQuestion: 1,
-          responses: [1]
-        },
-        { idQuestion: 2,
-          responses: [4,5]
-        }
-      ]}
-  }, (error: any, res: Response, body: any) => {
-    console.log('IN CALLBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACK');
-    if (error) {
-      console.log('IN ERROR');
-      console.error(error);
-      return;
-    }
-    console.log(`statusCode: ${res.statusCode}`);
-    console.log('RESULATS DE LA REQUETE POST : '+body);
-    if(res.statusCode==201){
-      if(body.correct){
-        console.log('GOOD ANSWER');
-        return;
-      }
-      else{
-        console.log('BAAAAD ANSWER');
-        return;
-      }
-    }
-    else{
-      console.log('FAILED');
-      return;
-    }
-  });
-
-  console.log('behind post request');
-});
-
-
-//----------------------------------------------------------------------------------------------------
-
-
-qcmRouter.get('/add/fav', async (req: Request, res: Response) => {
-  console.log('BEGIN add fav');
-  let truc = await request({url: 'http://test-admitech-mcq-service.igpolytech.fr/attribute/2/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
-  //let truc = await request({url: 'http://localhost:3000/attribute/2/42', method: 'PUT', json: {foo: 'bar', woo: 'car'}}, (error: any, res: Response, body: any) => {
-    console.log('IN CALLBACK');
-    if (error) {
-      console.log('IN ERROR');
-      console.error(error);
-      return;
-    }
-    console.log(`statusCode: ${res.statusCode}`);
-    console.log('RESULATS DE LA REQUETE POST : '+body);
-    if(res.statusCode==201){
-      return('SUCCESS');
-      /*if(body.correct){
-        console.log('GOOD ANSWER');
-        return;
-      }
-      else{
-        console.log('BAAAAD ANSWER');
-        return;
-      }
-    }
-    else{
-      console.log('FAILED');
-      return ('FAILED');
-    }
-  });
-  res.send(truc);
-  console.log('behind post request');
-});
-*/
-
-//----------------------------------------------------------------------------------------------------
-
-
 
 qcmRouter.post('/mcq', async (req: Request, res: Response) => {
   let mcq = req.body;
