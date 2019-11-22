@@ -16,7 +16,6 @@ const qcmRouter = Router();
 //const request = require('request');
 
 qcmRouter.get('/', (req: Request, res: Response) => {
-  //logger.info('A request had been received on /');
   res.send('YAY you reach the mcq service API !');
 });
 
@@ -455,42 +454,47 @@ qcmRouter.get('/mcq/:id', async (req: Request, res: Response) => {
 
 
 qcmRouter.get('/mcqAdmin/:id', async (req: Request, res: Response) => {
-  let mcq = await mcqController.getMcqById(parseInt(req.params.id));
-  if(mcq!=null){
-    let result = {
-      id: mcq.id,
-      title: mcq.title,
-      formation: mcq.formation,
-      origin: mcq.origin,
-      favorite: mcq.favorite,
-      questions:[] as any
-    };
-    let mcqquestions = await questionController.getQuestionByMcqId(mcq.id);
-    for (const question of mcqquestions){
-      let qRes = {
-        id: question.id,
-        title: question.title,
-        responses: [] as any
+  if (res.locals.user.role === 'administration') {
+    let mcq = await mcqController.getMcqById(parseInt(req.params.id));
+    if(mcq!=null){
+      let result = {
+        id: mcq.id,
+        title: mcq.title,
+        formation: mcq.formation,
+        origin: mcq.origin,
+        favorite: mcq.favorite,
+        questions:[] as any
       };
-      let questionresponses = await responseController.getResponseByQuestion(question.id);
-      for (const response of questionresponses){
-        let rRes = {
-          id: response.id,
-          label: response.label,
-          correct: response.correct
+      let mcqquestions = await questionController.getQuestionByMcqId(mcq.id);
+      for (const question of mcqquestions){
+        let qRes = {
+          id: question.id,
+          title: question.title,
+          responses: [] as any
         };
-        qRes.responses.push(rRes);
+        let questionresponses = await responseController.getResponseByQuestion(question.id);
+        for (const response of questionresponses){
+          let rRes = {
+            id: response.id,
+            label: response.label,
+            correct: response.correct
+          };
+          qRes.responses.push(rRes);
+        }
+        result.questions.push(qRes);
       }
-      result.questions.push(qRes);
+      res.type('application/json')
+        .status(200)
+        .send(result);
     }
-    res.type('application/json')
-      .status(200)
-      .send(result);
+    else{
+      res.status(404)
+        .send('Probleme, Mcq not found');
+    }
   }
   else{
-    res.status(404)
-      .send('Probleme, Mcq not found');
-    res.send('NUUUUUUUUUUUUUUUUUUUUULLL');
+    res.status(403)
+      .send('Vous n\'avez pas accès à la ressource demandée');
   }
 });
 

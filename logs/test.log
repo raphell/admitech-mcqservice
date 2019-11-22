@@ -516,3 +516,33 @@
 {"message":"Call to DB : Executing (default): SELECT \"id\", \"label\", \"correct\", \"question_id\" FROM \"Responses\" AS \"Response\" WHERE \"Response\".\"question_id\" = 2;","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-21 18:25:38"}
 {"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-21 19:07:07"}
 {"message":"Call to DB : Executing (default): SELECT \"id\", \"mcq\", \"idCandidature\", \"mark\" FROM \"Candidates\" AS \"Candidate\" WHERE \"Candidate\".\"idCandidature\" = 42 LIMIT 1;","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-21 19:08:06"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 12:39:01"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:44:55"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"secret or public key must be provided"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:47:00"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"secret or public key must be provided"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:47:43"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"secret or public key must be provided"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:47:53"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:51:46"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"secret or public key must be provided"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:51:51"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:53:03"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"secret or public key must be provided"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:53:16"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:53:56"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"secret or public key must be provided"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 13:53:59"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 15:46:09"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"secret or public key must be provided"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 15:46:14"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 15:47:10"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"secret or public key must be provided"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 15:47:15"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 15:56:07"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"invalid signature"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 15:56:11"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 15:58:25"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"invalid signature"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 15:58:32"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:01:50"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"invalid signature"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:01:57"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:05:52"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"invalid signature"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:06:10"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:10:36"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"invalid signature"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:10:51"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"invalid signature"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:18:58"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:36:12"}
+{"message":["Error while checking JWT",{"name":"JsonWebTokenError","message":"invalid signature"}],"level":"error","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 16:36:26"}
+{"message":"App is listening on port 3000!","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 17:03:52"}
+{"message":"Call to DB : Executing (default): SELECT \"id\", \"title\", \"formation\", \"origin\", \"favorite\" FROM \"Mcqs\" AS \"Mcq\";","level":"info","service":"admitech_mcqservice-undefined","timestamp":"2019-11-22 17:03:54"}
