@@ -224,7 +224,7 @@ qcmRouter.put('/mcq/:id/favorite', async (req: Request, res: Response) => {
 
   await mcqController.unsetFavorite(mcq.formation, mcq.origin);
 
-  let newFavorite = await mcqController.setFavorite(parseInt(req.params.id));
+  await mcqController.setFavorite(parseInt(req.params.id));
 
   res.status(201)
     .end();
