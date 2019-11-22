@@ -205,13 +205,10 @@ qcmRouter.post('/mcq', async (req: Request, res: Response) => {
       res.status(400)
         .send('Probleme during MCQ creation');
     }
-    console.log('BEFORE send status');
     res.status(201)
       .send({final:'the mcq creation succed'});
-    console.log('AFTER send status');
 
   } catch (e) {
-    console.log('ERROR : '+e.message);
     res.status(500)
       .send(e.message);
   }
@@ -229,28 +226,25 @@ qcmRouter.put('/mcq/:id/favorite', async (req: Request, res: Response) => {
 
   let newFavorite = await mcqController.setFavorite(parseInt(req.params.id));
 
-  console.log('AFTER SET : '+newFavorite[0]);
-  console.log('AFTER SET : '+newFavorite[1][0].origin);
-
   res.status(201)
     .end();
 });
 
+
+//----------------------------------------------------------------------------------------------------
 
 
 
 qcmRouter.put('/attribute/:idMcq/:idCandidature', async (req: Request, res: Response) => {
 
   let candidate = await candidateController.getCandidateByCandidatureId(parseInt(req.params.idCandidature));
-  console.log('candidate : '+candidate);
-  //console.log("ITS ID : "+candidate.id);
+
   if(candidate==null){
     let newCandidate = new Candidate();
     newCandidate.mark = -1;
     newCandidate.mcq = 0;
     newCandidate.idCandidature = parseInt(req.params.idCandidature);
     candidate = await candidateController.createCandidate(newCandidate);
-    console.log('AFTER CREATING NEW CANDIDATE');
   }
 
   await candidateController.setCandidateMcq(candidate.id, parseInt(req.params.idMcq));
@@ -264,7 +258,6 @@ qcmRouter.put('/attribute/:idMcq/:idCandidature', async (req: Request, res: Resp
 
 
 qcmRouter.delete('/mcq/:id', async (req: Request, res: Response) => {
-  console.log('IN DELEEEEEEETE');
   let mcqToDelete = await mcqController.getMcqById(parseInt(req.params.id));
 
   if (mcqToDelete!=null){
@@ -282,7 +275,6 @@ qcmRouter.delete('/mcq/:id', async (req: Request, res: Response) => {
       .end();
   }
   else{
-    console.log('IN ERROR');
     res.status(404)
       .send('Probleme, Mcq not found');
   }
@@ -294,22 +286,17 @@ qcmRouter.delete('/mcq/:id', async (req: Request, res: Response) => {
 
 qcmRouter.post('/responseCandidat', async (req: Request, res: Response) => {
   let candidateResponses = req.body;
-  console.log('IN RESPONSE CANDIDAT');
-  console.log(req.body);
   let candidate = await candidateController.getCandidateByCandidatureId(candidateResponses.idCandidature);
-  console.log('candidate : '+candidate);
-  //console.log("ITS ID : "+candidate.id);
+
   if(candidate==null){
     let newCandidate = new Candidate();
     newCandidate.mark = -1;
     newCandidate.idCandidature = candidateResponses.idCandidature;
     candidate = await candidateController.createCandidate(newCandidate);
-    console.log('AFTER CREATING NEW CANDIDATE');
   }
 
   let note = 0;
   for (const candidateResponse of candidateResponses.questions){
-  //candidateResponses.questions.forEach( async(candidateResponse: any) => {
     let newCandidateResponse = new CandidateResponse();
 
     newCandidateResponse.responses = candidateResponse.responses.join(':'); //responses is a table of id
@@ -321,32 +308,24 @@ qcmRouter.post('/responseCandidat', async (req: Request, res: Response) => {
     if(createdCandidateResponse!=undefined){
       let questionGoodResponses = await responseController.getCorrectResponseByQuestion(createdCandidateResponse.question_id);
       let isResponseValid = true;
-
       let resp = createdCandidateResponse.responses.split(':').map( (strResp: string) => {return parseInt(strResp); });
-      console.log('RESPONSE IN INNNT : '+resp);
-      for (const candRes of resp){
-      //resp.forEach( async(candRes: number) => {   //for each response of the candidate, verify if the response if correct
+
+      for (const candRes of resp){ //for each response of the candidate, verify if the response if correct
         let verif = await responseController.getResponseById(candRes);
         if (verif==null){
           isResponseValid = false;
         }
         else{
-          console.log('FOUND A RESPONSE WITH THIS ID');
           isResponseValid = verif.correct;
         }
       }
       //for each good response of the question, check if the candidate valide it
       questionGoodResponses.forEach( (goodResp: ResponseM) => {
-        console.log('SEARCH '+goodResp.id+' IN '+resp);
         isResponseValid = resp.includes(goodResp.id);
       });
 
       if(isResponseValid){
-        console.log('VALIIIIIIIIIIIIIIIIID');
         note = note + 1;
-      }
-      else{
-        console.log('NOOOOOOOOOOOT   VALIIIIIIIIIIIIIIIIID');
       }
     }
     else{
@@ -356,15 +335,14 @@ qcmRouter.post('/responseCandidat', async (req: Request, res: Response) => {
   }
   candidateController.setCandidateMark(candidate.id, note);
 
-
   res.type('application/json')
     .status(201)
     .send({note: note});
 });
 
 
-
 //----------------------------------------------------------------------------------------------------
+
 
 qcmRouter.get('/mcqs', async (req: Request, res: Response) => {
   let mcqs: Mcq[] = await mcqController.getAllMcqs();
@@ -387,6 +365,26 @@ qcmRouter.get('/mcqs', async (req: Request, res: Response) => {
     .send(result);
 });
 
+
+//----------------------------------------------------------------------------------------------------
+
+
+qcmRouter.get('/candidate/:idCandidate/note', async (req: Request, res: Response) => {
+  let candidate = await candidateController.getCandidateByCandidatureId(parseInt(req.params.idCandidate));
+  if (candidate!=null){
+    let note = candidate.mark;
+    res.type('application/json')
+      .status(200)
+      .send({mark: note});
+  }
+  else{
+    res.status(404)
+      .send('Candidate not found');
+  }
+});
+
+
+//----------------------------------------------------------------------------------------------------
 
 
 qcmRouter.get('/candidates', async (req: Request, res: Response) => {
@@ -427,22 +425,17 @@ qcmRouter.get('/mcq/:id', async (req: Request, res: Response) => {
     };
     let mcqquestions = await questionController.getQuestionByMcqId(mcq.id);
     for (const question of mcqquestions){
-      console.log('each QUESTION : '+question);
       let qRes = {
         id: question.id,
         title: question.title,
         responses: [] as any
       };
-      console.log(qRes);
       let questionresponses = await responseController.getResponseByQuestion(question.id);
       for (const response of questionresponses){
-        console.log('each RESPONSE : '+response);
         let rRes = {
           id: response.id,
           label: response.label
         };
-        console.log(rRes);
-        console.log();
         qRes.responses.push(rRes);
       }
       result.questions.push(qRes);
@@ -458,6 +451,7 @@ qcmRouter.get('/mcq/:id', async (req: Request, res: Response) => {
 });
 
 
+//----------------------------------------------------------------------------------------------------
 
 
 qcmRouter.get('/mcqAdmin/:id', async (req: Request, res: Response) => {
@@ -473,23 +467,18 @@ qcmRouter.get('/mcqAdmin/:id', async (req: Request, res: Response) => {
     };
     let mcqquestions = await questionController.getQuestionByMcqId(mcq.id);
     for (const question of mcqquestions){
-      console.log('each QUESTION : '+question);
       let qRes = {
         id: question.id,
         title: question.title,
         responses: [] as any
       };
-      console.log(qRes);
       let questionresponses = await responseController.getResponseByQuestion(question.id);
       for (const response of questionresponses){
-        console.log('each RESPONSE : '+response);
         let rRes = {
           id: response.id,
           label: response.label,
           correct: response.correct
         };
-        console.log(rRes);
-        console.log();
         qRes.responses.push(rRes);
       }
       result.questions.push(qRes);
@@ -506,20 +495,17 @@ qcmRouter.get('/mcqAdmin/:id', async (req: Request, res: Response) => {
 });
 
 
-
+//----------------------------------------------------------------------------------------------------
 
 
 qcmRouter.get('/candidate/:id/results', async (req: Request, res: Response) => {
-  console.log('BEGIN GET CANDIDAT RESPONSES');
   let candidate = await candidateController.getCandidateByCandidatureId(parseInt(req.params.id));
-  console.log('CANDIATE : '+candidate);
   let result = {
     idCandidature: req.params.id,
     mark: candidate.mark,
     questions: [] as any
   };
   if (candidate!=null){
-    console.log('WEG GET THE CANDIDATE');
     let candidateResponses = await candidateResponseController.getCandidateAllResponse(candidate.id);
     for (const candidateRep of candidateResponses){
       let question = await questionController.getQuestionById(candidateRep.question_id);
@@ -529,7 +515,6 @@ qcmRouter.get('/candidate/:id/results', async (req: Request, res: Response) => {
         candidateResponses: candidateRep.responses.split(':').map( (strResp: string) => {return parseInt(strResp); }),
         responses: [] as any
       };
-      console.log(qRes);
       let questionResponses = await responseController.getResponseByQuestion(question.id);
       for (const response of questionResponses){
         let rRes = {
@@ -537,32 +522,22 @@ qcmRouter.get('/candidate/:id/results', async (req: Request, res: Response) => {
           label: response.label,
           correct: response.correct
         };
-        console.log(rRes);
         qRes.responses.push(rRes);
       }
       result.questions.push(qRes);
-      console.log('Q RES : '+qRes);
     }
     res.type('application/json')
       .status(200)
       .send(result);
   }
   else{
-    console.log('IN ERROR');
     res.status(404)
       .send('Probleme, Candidate not found');
   }
 });
 
 
-qcmRouter.get('/candidate/:idCandidate/note', async (req: Request, res: Response) => {
-  let candidate = await candidateController.getCandidateByCandidatureId(parseInt(req.params.idCandidate));
-  let note = candidate.mark;
-  res.type('application/json')
-    .status(200)
-    .send({mark: note});
-});
-
+//----------------------------------------------------------------------------------------------------
 
 
 qcmRouter.get('/candidate/:idCandidate/mcq', async (req: Request, res: Response) => {
@@ -576,22 +551,17 @@ qcmRouter.get('/candidate/:idCandidate/mcq', async (req: Request, res: Response)
     };
     let mcqquestions = await questionController.getQuestionByMcqId(mcq.id);
     for (const question of mcqquestions){
-      console.log('each QUESTION : '+question);
       let qRes = {
         id: question.id,
         title: question.title,
         responses: [] as any
       };
-      console.log(qRes);
       let questionresponses = await responseController.getResponseByQuestion(question.id);
       for (const response of questionresponses){
-        console.log('each RESPONSE : '+response);
         let rRes = {
           id: response.id,
           label: response.label
         };
-        console.log(rRes);
-        console.log();
         qRes.responses.push(rRes);
       }
       result.questions.push(qRes);
@@ -602,12 +572,9 @@ qcmRouter.get('/candidate/:idCandidate/mcq', async (req: Request, res: Response)
   }
   else{
     res.status(404)
-      .send('Probleme, no mcq is favorite for these specific formation and origin');
+      .send('Probleme, mcq not found');
   }
 });
-
-
-
 
 
 
