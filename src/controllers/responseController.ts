@@ -2,19 +2,16 @@ import Response from '../models/response';
 
 
 async function createResponse(response: Response): Promise<Response> {
-  console.log('BEGIN create new Response');
   const newResponse = {
     label: response.label,
     correct: response.correct,
     question_id: response.question_id
   };
-  console.log('newResponse initialised');
-  console.log(newResponse);
   return Response.create(newResponse);
 }
 
+
 function getResponseByLabel(question_id: number, label: string): Promise<Response> {
-  console.log('IN GET response BY label');
   return Response.findOne({
     where: {
       label: label,
@@ -22,6 +19,7 @@ function getResponseByLabel(question_id: number, label: string): Promise<Respons
     }
   });
 }
+
 
 function getResponseByQuestion(id: number): Promise<Response[]> {
   return Response.findAll({
@@ -31,6 +29,7 @@ function getResponseByQuestion(id: number): Promise<Response[]> {
   });
 }
 
+
 function getResponseById(id: number): Promise<Response> {
   return Response.findOne({
     where: {
@@ -38,6 +37,7 @@ function getResponseById(id: number): Promise<Response> {
     }
   });
 }
+
 
 function getCorrectResponseByQuestion(id: number): Promise<Response[]> {
   return Response.findAll({
@@ -47,6 +47,7 @@ function getCorrectResponseByQuestion(id: number): Promise<Response[]> {
     }
   });
 }
+
 
 function deleteResponse(id: number): Promise<number> {
   console.log('DEL RESP : '+id);
