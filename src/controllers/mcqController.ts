@@ -2,21 +2,20 @@ import Mcq from '../models/mcq';
 
 
 async function createNewMcq(mcq: Mcq): Promise<Mcq> {
-  console.log('BEGIN create new MCQ');
   const newMcq = {
     title: mcq.title,
     formation: mcq.formation,
     origin: mcq.origin,
     favorite: false
   };
-  console.log('newmcq initialised');
-  console.log(newMcq);
   return Mcq.create(newMcq);
 }
+
 
 function getAllMcqs(): Promise<Mcq[]> {
   return Mcq.findAll();
 }
+
 
 function getMcqByTitle(mcqTitle: string): Promise<Mcq> {
   return Mcq.findOne({
@@ -25,6 +24,7 @@ function getMcqByTitle(mcqTitle: string): Promise<Mcq> {
     }
   });
 }
+
 
 function getMcqById(id: number): Promise<Mcq> {
   return Mcq.findOne({
@@ -45,6 +45,7 @@ function setFavorite(id: number): Promise<[number, Mcq[]]> {
     });
 }
 
+
 function unsetFavorite(formation: string, origin: string): Promise<[number, Mcq[]]> {
   return Mcq.update(
     { favorite: false},
@@ -59,18 +60,6 @@ function unsetFavorite(formation: string, origin: string): Promise<[number, Mcq[
 }
 
 
-/*
-function getMcqByFormationAndOrigin(formation: string, origin: string): Promise<Mcq> {
-  return Mcq.findAll({
-    where: {
-      formation: formation,
-      origin: origin
-    }
-  });
-}
-*/
-
-
 function getFavoriteMcqByFormationAndOrigin(formation: string, origin: string): Promise<Mcq> {
   return Mcq.findOne({
     where: {
@@ -80,6 +69,7 @@ function getFavoriteMcqByFormationAndOrigin(formation: string, origin: string): 
     }
   });
 }
+
 
 function deleteMcq(id: number): Promise<number> {
   return Mcq.destroy({
