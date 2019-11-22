@@ -2,6 +2,26 @@
 
 Team : Lucas Gonçalves, Inès Missoum, Fatima Machhouri, Thomas Falcone, Raphael Luciano, Martin Cayuelas
 
+
+# Deploy
+
+For information:
+```
+apps:create admitech-mcq-service
+apps:create test-admitech-mcq-service
+
+docker-options:add admitech-mcq-service build --build-arg "DD_API_KEY=<datadog api key>"
+docker-options:add test-admitech-mcq-service build --build-arg "DD_API_KEY=<datadog api key>"
+
+config:set admitech-mcq-service DD_API_KEY=<datadog api key>
+config:set test-admitech-mcq-service DD_API_KEY=<datadog api key>
+
+proxy:ports-add admitech-mcq-service http:80:3000
+proxy:ports-add test-admitech-mcq-service http:80:3000
+```
+
+
+
 ## Routes
 
 ![#1c7cf0 ](https://placehold.it/15/1c7cf0/000000?text=+) **GET** - ``/mcq/:id`` -  Renvoie l'ensemble des informations d'un QCM (sans la validité des réponses).
